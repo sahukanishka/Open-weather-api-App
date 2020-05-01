@@ -87,13 +87,14 @@
         android:layout_below="@+id/pressure_text"
         android:textSize="20sp" />
 
-    <Button
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:id="@+id/button1"
+
+    <TextView
+        android:id="@+id/locations_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:textColor="@android:color/black"
+        android:layout_below="@+id/icon_text"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/find_city"
