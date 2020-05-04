@@ -4,7 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/gradient_background">
+
+
+
 <!--    android:background = "@drawable/backfill">-->
 
 
@@ -25,7 +29,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
-        android:textSize="20sp" />
+        android:textSize="85dp" />
+
 
 
     <TextView
@@ -34,7 +39,7 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:layout_below="@+id/temp_text"
-        android:textSize="20sp" />
+        android:textSize="40sp" />
 
 
     <TextView
@@ -96,20 +101,30 @@
         android:layout_below="@+id/icon_text"
         android:textSize="20sp" />
 
-    <EditText
-        android:id="@+id/find_city"
+    <TextView
+        android:id="@+id/yourcity_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="30dp"
-        android:ems="10"
-        android:hint="Search your City"
-        android:inputType="textPersonName" />
+        android:textColor="@android:color/black"
+        android:layout_below="@+id/locations_text"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/yourstate_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_below="@+id/yourcity_text"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/yourcountry_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_below="@+id/yourstate_text"
+        android:textSize="20sp" />
+
 
 
 </RelativeLayout>

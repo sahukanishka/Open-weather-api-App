@@ -13,10 +13,13 @@ import android.content.pm.PackageManager;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +36,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.provider.Settings;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 //import android.support.v4.app.ActivityCompat;
 //import android.support.v7.app.AlertDialog;
 //import android.support.v7.app.AppCompatActivity;
@@ -46,6 +53,9 @@ public class MainActivity extends AppCompatActivity  {
     private static  final int REQUEST_LOCATION=1;
     private RequestQueue mrequestqueu;
     private FloatingActionButton btn;
+    private TextView yourcity_text;
+    private TextView yourstate_text ;
+    private  TextView yourcountry_text ;
     private EditText find_city;
     private TextView temp_text;
     private TextView city_text;
@@ -56,12 +66,23 @@ public class MainActivity extends AppCompatActivity  {
     private TextView preasure_text ;
     private   String city_name ;
     private  TextView showLocationTxt ;
+    private  Button alertbox_btn ;
     LocationManager locationManager;
-    String latitude,longitude;
+    String latitude,longitude,stateName,countryName,url;
+    String cityName = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+//        try
+//        {
+//            this.getSupportActionBar().hide();
+//        }
+//        catch (NullPointerException e){}
+
         setContentView(R.layout.activity_main);
 
         btn = findViewById(R.id.floatingActionButton2);
@@ -72,8 +93,12 @@ public class MainActivity extends AppCompatActivity  {
         weather_type_text = findViewById(R.id.weather_type_text);
         preasure_text = findViewById(R.id.pressure_text);
         humidity_text = findViewById(R.id.humidity_text);
-        find_city = findViewById(R.id.find_city);
+//        find_city = findViewById(R.id.find_city);
         showLocationTxt = findViewById(R.id.locations_text);
+        yourcity_text = findViewById(R.id.yourcity_text);
+        yourstate_text = findViewById(R.id.yourstate_text);
+        yourcountry_text = findViewById(R.id.yourcountry_text);
+//        alertbox_btn = findViewById(R.id.alertbox_btn);
 
         //Add permission
 
@@ -96,6 +121,7 @@ public class MainActivity extends AppCompatActivity  {
             //GPS is already On then
 
             getLocation();
+//            checkforcurrentweather();
         }
 
 
@@ -107,22 +133,43 @@ public class MainActivity extends AppCompatActivity  {
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this,
                         "Button pressed", Toast.LENGTH_LONG).show();
-                     city_name = find_city.getText().toString();
+                     callalertbox();
                 jsonParse();
 
             }
         });
 
+
     }
+
+//    private  void checkforcurrentweather(){
+
+//        if(city_name.isEmpty()){
+//             url = "http://api.openweathermap.org/data/2.5/weather?lat="+latitude+"&lon="+longitude+"&appid=b7d6a69e341e91ca31cefbd99139d193";
+//             jsonParse();
+//        }
+//        else{
+//             url = "http://api.openweathermap.org/data/2.5/weather?q="+city_name+"&appid=b7d6a69e341e91ca31cefbd99139d193";
+//             jsonParse();
+//        }
+//    }
 
     private void jsonParse() {
 
-        Toast.makeText(MainActivity.this,
-                "function called", Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this,"function called", Toast.LENGTH_LONG).show();
+
+
+//        if(city_name.isEmpty()){
+//            url = "http://api.openweathermap.org/data/2.5/weather?q="+"Delhi"+"&appid=b7d6a69e341e91ca31cefbd99139d193";
+//
+//        }
+//        else{
+//            url = "http://api.openweathermap.org/data/2.5/weather?q="+city_name+"&appid=b7d6a69e341e91ca31cefbd99139d193";
+//
+//        }
 
 
         String url = "http://api.openweathermap.org/data/2.5/weather?q="+city_name+"&appid=b7d6a69e341e91ca31cefbd99139d193";
-
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -135,29 +182,25 @@ public class MainActivity extends AppCompatActivity  {
                             JSONObject mainobject = response.getJSONObject("main");
                             JSONObject sysobject = response.getJSONObject("sys");
 
+                            double temp_cell = (mainobject.getDouble("temp") );
+                            temp_cell = temp_cell - 273 ;
+                            temp_cell =  Math.floor(temp_cell * 100) / 100;
 
-                            String temp_view = String.valueOf(mainobject.getDouble("temp"));
+                            String temp_view = String.valueOf(temp_cell);
                             String pressure_view = String.valueOf(mainobject.getDouble("pressure"));
                             String humidity_view = String.valueOf(mainobject.getDouble("humidity"));
                             String weather_view = weatherobject.getString("main");
                             String description_view = weatherobject.getString("description");
-//                            String icon_view = String.valueOf(weatherarray.getDouble("icon"));
+//
                             String country_view = sysobject.getString("country");
                             String city_view = response.getString("name");
-//                            String weather_view = weatherarray.getString(1);
-//                            String description_view = weatherarray.getString(2);
-
-
-//                            String temp = String.valueOf(mainobject.getDouble("temp"));
-//                            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 //
-//                            String city = response.getString("name");
-//                              String value = String.valueOf(response.getInt("cases"));
+
 
                             Toast.makeText(MainActivity.this,
                                     "printing data", Toast.LENGTH_LONG).show();
 
-                            temp_text.setText(temp_view);
+                            temp_text.setText(temp_view +"°C");
                             city_text.setText(city_view);
                             country_text.setText(country_view);
                             description_text.setText(description_view);
@@ -203,7 +246,25 @@ public class MainActivity extends AppCompatActivity  {
 
                 latitude=String.valueOf(lat);
                 longitude=String.valueOf(longi);
+//                jsonParse();
 
+
+
+                try {
+                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                    List<Address> addresses = geocoder.getFromLocation(lat, longi, 1);
+                     cityName = addresses.get(0).getAddressLine(0);
+                     stateName = addresses.get(0).getAddressLine(1);
+                   countryName = addresses.get(0).getAddressLine(2);
+
+                    yourcity_text.setText(cityName);
+                    yourstate_text.setText(stateName);
+                    yourcountry_text.setText(countryName);
+
+                }
+                catch(IOException e) {
+                    e.printStackTrace();
+                }
                 showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
             }
             else if (LocationNetwork !=null)
@@ -215,6 +276,20 @@ public class MainActivity extends AppCompatActivity  {
                 longitude=String.valueOf(longi);
 
                 showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
+                try {
+                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                    List<Address> addresses = geocoder.getFromLocation(lat, longi, 1);
+                    String cityName = addresses.get(0).getAddressLine(0);
+                    String stateName = addresses.get(0).getAddressLine(1);
+                    String countryName = addresses.get(0).getAddressLine(2);
+
+                    yourcity_text.setText(cityName);
+                    yourstate_text.setText(stateName);
+                    yourcountry_text.setText(countryName);
+                }
+                catch(IOException e) {
+                    e.printStackTrace();
+                }
             }
             else if (LocationPassive !=null)
             {
@@ -225,6 +300,20 @@ public class MainActivity extends AppCompatActivity  {
                 longitude=String.valueOf(longi);
 
                 showLocationTxt.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
+                try {
+                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                    List<Address> addresses = geocoder.getFromLocation(lat, longi, 1);
+                    String cityName = addresses.get(0).getAddressLine(0);
+                    String stateName = addresses.get(0).getAddressLine(1);
+                    String countryName = addresses.get(0).getAddressLine(2);
+
+                    yourcity_text.setText(cityName);
+                    yourstate_text.setText(stateName);
+                    yourcountry_text.setText(countryName);
+                }
+                catch(IOException e) {
+                    e.printStackTrace();
+                }
             }
             else
             {
@@ -233,6 +322,7 @@ public class MainActivity extends AppCompatActivity  {
 
             //Thats All Run Your App
         }
+
 
     }
 
@@ -255,6 +345,37 @@ public class MainActivity extends AppCompatActivity  {
         final AlertDialog alertDialog=builder.create();
         alertDialog.show();
     }
+
+
+    private void callalertbox(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Your City");
+
+// Set up the input
+        final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT );
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                city_name = input.getText().toString();
+                jsonParse();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+
 
 
 }
