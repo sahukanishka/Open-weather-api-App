@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/splashwhite">
+
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/splashscreenlogo"
+    android:layout_margin="140dp"/>
+
+<!--    <pl.droidsonroids.gif.GifImageView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/splashicon"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:layout_margin="20dp"-->
+<!--        android:layout_centerVertical="true"/>-->
+
+
+</RelativeLayout>
